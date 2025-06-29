@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Filter, Download, RefreshCw, FileSpreadsheet, Presentation } from 'lucide-react';
+import { Calendar, Filter, RefreshCw, FileSpreadsheet, Presentation } from 'lucide-react';
 
 export interface FilterState {
   timeframe: 'day' | 'week' | 'month' | 'quarter' | 'year';

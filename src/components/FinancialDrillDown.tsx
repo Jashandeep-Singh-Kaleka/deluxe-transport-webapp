@@ -1,14 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { 
-  TrendingDown, 
   AlertTriangle, 
   DollarSign, 
-  Fuel, 
-  Users, 
-  Truck, 
-  Calendar,
   Download,
   ArrowUpRight,
   ArrowDownRight,
@@ -17,13 +11,8 @@ import {
   PieChart,
   BarChart3
 } from 'lucide-react';
-import { enhancedMetrics } from '@/lib/enhanced-demo-data';
 
 export default function FinancialDrillDown() {
-  const [selectedPeriod, setSelectedPeriod] = useState('monthly');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
-  const monthlyMetrics = enhancedMetrics.monthly;
 
   // Calculate financial insights and money leaks
   const fuelEfficiencyLoss = 15420; // Monthly loss due to poor fuel efficiency
@@ -99,6 +88,51 @@ export default function FinancialDrillDown() {
     { name: 'Profit Margin', current: '17.4%', target: '22%', variance: '-20.9%', status: 'poor' }
   ];
 
+  const handleExportExcel = () => {
+    const csvContent = `Financial Drill Down Report\n\n` +
+      `Generated: ${new Date().toLocaleDateString()}\n\n` +
+      `MONEY LEAKS IDENTIFIED:\n` +
+      `Total Monthly Losses,$${totalMoneyLeaks.toLocaleString()}\n` +
+      `Fuel Inefficiency,$${fuelEfficiencyLoss.toLocaleString()}\n` +
+      `Driver Overtime,$${driverOvertimeCost.toLocaleString()}\n` +
+      `Maintenance Overrun,$${maintenanceOverrun.toLocaleString()}\n` +
+      `Route Inefficiency,$${routeInefficiency.toLocaleString()}\n` +
+      `Idle Time,$${idleTimeCost.toLocaleString()}\n`;
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `financial-drill-down-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExportPowerPoint = () => {
+    const presentationData = `Financial Drill Down Executive Report\n\n` +
+      `Generated: ${new Date().toLocaleDateString()}\n\n` +
+      `CRITICAL FINDINGS:\n` +
+      `• Total Monthly Money Leaks: $${totalMoneyLeaks.toLocaleString()}\n` +
+      `• Annual Impact: $${(totalMoneyLeaks * 12).toLocaleString()}\n` +
+      `• Top Priority: Driver Overtime ($${driverOvertimeCost.toLocaleString()}/month)\n` +
+      `• Quick Win: Route Optimization ($${routeInefficiency.toLocaleString()}/month)\n\n` +
+      `SAVING OPPORTUNITIES:\n` +
+      savingOpportunities.slice(0, 3).map(opp => 
+        `• ${opp.opportunity}: $${opp.potentialSaving.toLocaleString()}/month (${opp.roi} ROI)`).join('\n');
+    
+    const blob = new Blob([presentationData], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `financial-drill-down-presentation-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -109,11 +143,15 @@ export default function FinancialDrillDown() {
             <p className="text-red-100 text-lg">Executive-level cost analysis and money leak detection</p>
           </div>
           <div className="flex gap-3">
-            <button className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+            <button 
+              onClick={handleExportExcel}
+              className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
               <Download className="h-5 w-5" />
               Export to Excel
             </button>
-            <button className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+            <button 
+              onClick={handleExportPowerPoint}
+              className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
               <Download className="h-5 w-5" />
               Export to PowerPoint
             </button>

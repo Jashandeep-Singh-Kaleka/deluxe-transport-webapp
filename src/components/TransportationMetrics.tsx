@@ -82,13 +82,6 @@ export default function TransportationMetrics() {
   }, []);
 
   const handleExportExcel = () => {
-    const data = {
-      metrics: currentMetrics,
-      chartData: monthlyData,
-      filters: filters,
-      timestamp: new Date().toISOString()
-    };
-    
     // Simulate Excel export - in real implementation, use a library like xlsx
     const csvContent = `Transportation Metrics Report - ${filters.timeframe}\n\n` +
       `Generated: ${new Date().toLocaleDateString()}\n\n` +
@@ -110,13 +103,6 @@ export default function TransportationMetrics() {
   };
 
   const handleExportPowerPoint = () => {
-    const data = {
-      metrics: currentMetrics,
-      chartData: monthlyData,
-      filters: filters,
-      timestamp: new Date().toISOString()
-    };
-    
     // Simulate PowerPoint export - in real implementation, use a library like pptxgenjs
     const presentationData = `Transportation Metrics Presentation\n\n` +
       `Report Period: ${filters.timeframe.toUpperCase()}\n` +
